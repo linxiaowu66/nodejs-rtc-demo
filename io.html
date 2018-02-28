@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"
+  crossorigin="anonymous"></script>
+    <title>socketIO-demo</title>
+    <!-- <link rel="stylesheet" type="text/css" href="main.css"> -->
+    <script type="text/javascript" src='io.js'></script>
+</head>
+<body>
+    <div class="content">
+      <p id="message"></p>
+    </div>
+    <span class="ns1">连接到ns1</span>
+    <span class="ns2">连接到ns2</span>
+    <span class="ns3">连接到ns3</span>
+    <div class="broadcast-all">广播到所有客户端</div>
+    <div class="broadcast-ns">广播到所有自己对应的ns下所有客户端</div>
+    <div class="broadcast-room">广播到所有自己对应的ns下room房间的所有客户端</div>
+</body>
+</html>
+

@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-rtc-demo",
+  "version": "1.0.0",
+  "description": "nodejs implements rtc application",
+  "main": "index.js",
+  "scripts": {
+    "start": ""
+  },
+  "keywords": [
+    "websocket",
+    "socket.io",
+    "eventsource"
+  ],
+  "author": "linguang661990@126.com",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.1",
+    "socket.io": "^2.0.4",
+    "uuid": "^3.2.1",
+    "ws": "^4.1.0"
+  }
+}
