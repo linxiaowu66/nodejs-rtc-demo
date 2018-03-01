@@ -10,19 +10,21 @@
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"
   crossorigin="anonymous"></script>
     <title>socketIO-demo</title>
-    <!-- <link rel="stylesheet" type="text/css" href="main.css"> -->
+    <link rel="stylesheet" type="text/css" href="index.css">
     <script type="text/javascript" src='io.js'></script>
 </head>
 <body>
     <div class="content">
       <p id="message"></p>
     </div>
-    <span class="ns1">连接到ns1</span>
-    <span class="ns2">连接到ns2</span>
-    <span class="ns3">连接到ns3</span>
-    <div class="broadcast-all">广播到所有客户端</div>
-    <div class="broadcast-ns">广播到所有自己对应的ns下所有客户端</div>
-    <div class="broadcast-room">广播到所有自己对应的ns下room房间的所有客户端</div>
+    <hr />
+    <span class="ns1 btn">连接到ns1</span>
+    <span class="ns2 btn">连接到ns2</span>
+    <span class="ns3 btn">连接到ns3</span>
+    <hr />
+    <div class="broadcast-all btn">广播到所有客户端</div>
+    <div class="broadcast-ns btn">广播到所有自己对应的ns下所有客户端</div>
+    <div class="broadcast-room btn">广播到所有自己对应的ns下room房间的所有客户端</div>
 </body>
 </html>
 

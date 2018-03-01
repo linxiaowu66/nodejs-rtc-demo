@@ -1,10 +1,12 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const path = require('path')
 
 app.use(express.static(path.join('./public'), { maxAge: 86400000 }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const ns1 = io.of('/ns1')
 const ns2 = io.of('/ns2')
@@ -12,21 +14,25 @@ const ns3 = io.of('/ns3')
 
 // 广播给指定room的所有成员
 app.post('/broadcast/room', (req, res) => {
-  const { room } = req.params
+  const { room } = req.body
   ns3.to(room).emit('newMessage', `someone want to broadcast to the members of room[${room}]`)
   res.json({ msg: "ok" })
 })
 
 // 广播给指定的namespace的所有成员
 app.post('/broadcast/namespace', (req, res) => {
-  const { ns } = req.params
+  const { ns } = req.body
+  if (!ns) {
+    res.json({ msg: '缺少参数'})
+    return
+  }
   io.of(ns).emit('newMessage', `someone want to broadcast to the members of ns[${ns}]`)
   res.json({ msg: "ok" })
 })
 
 app.post('/broadcast/all', (req, res) => {
   // 广播给所有的客户端,不论namespace/room
-  io.sockets.emit("broadcast", { ts: Date.now() });
+  io.sockets.emit("newMessage", `someone want to broadcast to all clients`);
   res.json({ msg: "ok" });
 })
 
@@ -34,7 +40,7 @@ app.use('/', (req, res) => res.sendFile(path.join(__dirname, './io.html')))
 
 // 场景一: 用户加入不同的namespace
 
-ns1.on('connnetion', (socket) => {
+ns1.on('connection', function (socket) {
   console.log(`client[${socket.id}] connected to /ns1 namespace`)
   // 统计当前ns1中有多少个客户端连接着
   ns1.clients((error, clients) => {
@@ -44,9 +50,13 @@ ns1.on('connnetion', (socket) => {
   // 通知给其他用户说,某某客户端上线了!
   // broadcast.emit可以发送给该namespace下的所有客户端除了当前连接的客户端
   socket.broadcast.emit('online', `client[${socket.id}] online, welcome him`)
+  socket.on('disconnect', function(){
+    console.log(`user[${socket.id}] offline`)
+    socket.broadcast.emit('offline', `client[${socket.id}] offline`)
+  })
 })
 
-ns2.on('connnetion', (socket) => {
+ns2.on('connection', (socket) => {
   console.log(`client[${socket.id}] connected to /ns2 namespace`)
   // 统计当前ns2中有多少个客户端连接着
   ns2.clients((error, clients) => {
@@ -56,9 +66,13 @@ ns2.on('connnetion', (socket) => {
   // 通知给其他用户说,某某客户端上线了!
   // broadcast.emit可以发送给该namespace下的所有客户端除了当前连接的客户端
   socket.broadcast.emit('online', `client[${socket.id}] online, welcome him`)
+  socket.on('disconnect', function(){
+    console.log(`user[${socket.id}] offline`)
+    socket.broadcast.emit('offline', `client[${socket.id}] offline`)
+  })
 })
 
-// 场景二: 加入不同的room
+// // 场景二: 加入不同的room
 
 ns3.on('connection', (socket) => {
   console.log(`client[${socket.id}] connected to /ns3 namespace`)
@@ -80,6 +94,10 @@ ns3.on('connection', (socket) => {
       ns3.to('room2').emit('online', `client[${socket.id}] online, welcome him`)
     }
     console.log(`current ns2 namespace have ${clients.length} clients`)
+  })
+  socket.on('disconnect', function(){
+    console.log(`user[${socket.id}] offline`)
+    ns3.to('room1').emit('offline', `client[${socket.id}] offline`)
   })
 })
 
