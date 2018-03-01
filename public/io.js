@@ -19,6 +19,9 @@ $(document).ready(function(){
       ns = 'ns3'
     }
   })
+  $('.main').click(() => {
+    socketInit()
+  })
   $('.broadcast-all').click(() => {
     fetch('http://localhost:3000/broadcast/all', {
       method: 'post'
@@ -51,10 +54,16 @@ $(document).ready(function(){
 
 function socketInit(){
   var socket = io();
-  socket.on('news', (event) => {
-    $('#message').text(event)
+
+  ss(socket).on('script', (stream) => {
+    let buffer = ''
+    stream.on("data", function (data) {
+      buffer += data.toString();
+    })
+    stream.on("end", function () {
+      $('#message').text(`收到流数据: ${buffer}`)
+    })
   })
-  return socket
 }
 
 // io不支持path动态传递进去,所以只能分开

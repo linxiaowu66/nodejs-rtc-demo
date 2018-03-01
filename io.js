@@ -1,9 +1,11 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const ss = require("socket.io-stream")
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const path = require('path')
+const fs = require("fs")
 
 app.use(express.static(path.join('./public'), { maxAge: 86400000 }))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -101,24 +103,18 @@ ns3.on('connection', (socket) => {
   })
 })
 
+// 发送流数据给客户端的实例
+io.on('connection', function(socket){
+  console.log(`client[${socket.id}] connected`)
+  console.log('current clients count: ', io.engine.clientsCount)
 
-// io.on('connection', function(socket){
-//   console.log(`client[${socket.id}] connected`)
-//   console.log('current clients count: ', io.engine.clientsCount)
-
-//   socket.on('disconnect', function(){
-//     console.log(`user[${socket.id}] disconnected`);
-//   });
-//   socket.on('news', function(id, msg){
-//     console.log(`client[${socket.id}] => server: message: ${msg}`)
-//     console.log('id: ', id)
-//       socket.broadcast.to(id).emit('news', `server => client[${socket.id}] ${Date.now()}`)
-//   })
-
-//   // setInterval(() => {
-//   //   socket.emit('news', `server => client[${socket.id}] ${Date.now()}`)
-//   // }, 5000)
-// })
+  socket.on('disconnect', function(){
+    console.log(`user[${socket.id}] disconnected`);
+  })
+  stream = ss.createStream()
+  ss(socket).emit('script', stream, {name: 'test.txt'})
+  fs.createReadStream('test.txt').pipe(stream)
+})
 
 http.listen(3000, function(){
   console.log('listening on *:3000');

@@ -9,6 +9,9 @@
     <script
   src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"
   crossorigin="anonymous"></script>
+  <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io-stream/0.9.1/socket.io-stream.js"
+  crossorigin="anonymous"></script>
     <title>socketIO-demo</title>
     <link rel="stylesheet" type="text/css" href="index.css">
     <script type="text/javascript" src='io.js'></script>
@@ -21,6 +24,7 @@
     <span class="ns1 btn">连接到ns1</span>
     <span class="ns2 btn">连接到ns2</span>
     <span class="ns3 btn">连接到ns3</span>
+    <span class="main btn">连接并获取流数据</span>
     <hr />
     <div class="broadcast-all btn">广播到所有客户端</div>
     <div class="broadcast-ns btn">广播到所有自己对应的ns下所有客户端</div>
