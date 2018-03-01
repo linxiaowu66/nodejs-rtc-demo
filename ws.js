@@ -1,29 +1,29 @@
-const express = require('express');
-const http = require('http');
-const url = require('url');
-const WebSocket = require('ws');
+const express = require('express')
+const http = require('http')
+const url = require('url')
+const WebSocket = require('ws')
 const path = require('path')
 const uuid = require('uuid')
 
-const app = express();
+const app = express()
 
 app.use(express.static(path.join('./public'), { maxAge: 86400000 }))
 app.use('/', (req, res) => res.sendFile(path.join(__dirname, './ws.html')))
 
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const server = http.createServer(app)
+const wss = new WebSocket.Server({ server })
 
 let targetClient = null
 
 wss.on('connection', function connection(ws, req) {
-  // const location = url.parse(req.url, true);
+  // const location = url.parse(req.url, true)
   // You might use location.query.access_token to authenticate or share sessions
   // or req.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
   ws.id = uuid.v4()
 
   ws.on('message', function incoming(message) {
-    console.log(`received client[${ws.id}]: ${message}`);
-  });
+    console.log(`received client[${ws.id}]: ${message}`)
+  })
 
   ws.on('close', function close() {
     console.log(`client[${ws.id}] close`)
@@ -47,7 +47,7 @@ wss.on('connection', function connection(ws, req) {
   } catch (err) {
     console.log('websocket error: ', err)
   }
-});
+})
 
 // 2分钟之后广播给所有的客户端
 setTimeout(() => {
@@ -62,5 +62,5 @@ setTimeout(() => {
 }, 10 * 1000)
 
 server.listen(3000, function listening() {
-  console.log('Listening on %d', server.address().port);
-});
+  console.log('Listening on %d', server.address().port)
+})

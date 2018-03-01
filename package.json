@@ -14,9 +14,11 @@
   "author": "linguang661990@126.com",
   "license": "MIT",
   "dependencies": {
+    "eventsource": "^1.0.5",
     "express": "^4.14.1",
     "socket.io": "^2.0.4",
     "socket.io-stream": "^0.9.1",
+    "ssestream": "^1.0.1",
     "uuid": "^3.2.1",
     "ws": "^4.1.0"
   }
