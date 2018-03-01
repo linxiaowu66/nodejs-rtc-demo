@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  // 使用polyfill这个包在chrome浏览器的network panel是看不到event stream的
   // const es = new EventSourcePolyfill('/sse')
   // const es = new EventSourcePolyfill('http://localhost:3000/sse')
   const es = new EventSource('/sse')
