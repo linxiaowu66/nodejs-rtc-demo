@@ -40,6 +40,24 @@ app.post('/broadcast/all', (req, res) => {
 
 app.use('/', (req, res) => res.sendFile(path.join(__dirname, './io.html')))
 
+// 给ns1添加中间件的操作
+
+// ns1.use((socket, next) => {
+//   console.log('middleware has triggered.......')
+//   // if (socket.request.headers.cookie) return next();
+//   next(new Error('Authentication error'));
+// })
+
+// socket.io这边有个很奇怪的，如果我使用io.use的话，那么只有连接根ns的客户端才会收到这个错误的packet
+// 而不会让某个ns的客户端收到，但是这个中间件的函数却是监听所有的socket的。
+
+// io.use((socket, next) => {
+//   console.log('middleware has triggered.......')
+//   // if (socket.request.headers.cookie) return next();
+//   next(new Error('Authentication error'));
+// })
+
+
 // 场景一: 用户加入不同的namespace
 
 ns1.on('connection', function (socket) {
@@ -52,9 +70,19 @@ ns1.on('connection', function (socket) {
   // 通知给其他用户说,某某客户端上线了!
   // broadcast.emit可以发送给该namespace下的所有客户端除了当前连接的客户端
   socket.broadcast.emit('online', `client[${socket.id}] online, welcome him`)
+
+  // socket.use((packet, next) => {
+  //   console.log('ns1 middleware has triggered........')
+  //   if (packet.doge === true) return next();
+  //   next(new Error('Not a doge error'));
+  // });
+
   socket.on('disconnect', function(){
     console.log(`user[${socket.id}] offline`)
     socket.broadcast.emit('offline', `client[${socket.id}] offline`)
+  })
+  socket.on('error', function(err){
+    console.error('ns1 receive error:', err)
   })
 })
 
@@ -71,6 +99,9 @@ ns2.on('connection', (socket) => {
   socket.on('disconnect', function(){
     console.log(`user[${socket.id}] offline`)
     socket.broadcast.emit('offline', `client[${socket.id}] offline`)
+  })
+  socket.on('error', function(err){
+    console.error('ns2 receive error:', err)
   })
 })
 
@@ -101,6 +132,9 @@ ns3.on('connection', (socket) => {
     console.log(`user[${socket.id}] offline`)
     ns3.to('room1').emit('offline', `client[${socket.id}] offline`)
   })
+  socket.on('error', function(err){
+    console.error('ns3 receive error:', err)
+  })
 })
 
 // 发送流数据给客户端的实例
@@ -114,6 +148,10 @@ io.on('connection', function(socket){
   stream = ss.createStream()
   ss(socket).emit('script', stream, {name: 'test.txt'})
   fs.createReadStream('test.txt').pipe(stream)
+
+  socket.on('error', function(err){
+    console.error('root ns receive error:', err)
+  })
 })
 
 http.listen(3000, function(){

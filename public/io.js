@@ -61,8 +61,11 @@ function socketInit(){
       buffer += data.toString();
     })
     stream.on("end", function () {
-      $('#message').text(`收到流数据: ${buffer}`)
+      $('#message').text(`根ns收到流数据: ${buffer}`)
     })
+  })
+  socket.on('error', (err) => {
+    $('#message').text(`根ns收到错误的消息: ${err}`)
   })
 }
 
@@ -71,38 +74,47 @@ function socketInit(){
 function nsSocketInitNs1() {
   const socket = io('/ns1')
   socket.on('online', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns1收到消息: ${event}`)
   })
   socket.on('newMessage', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns1收到消息: ${event}`)
   })
   socket.on('offline', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns1收到消息: ${event}`)
+  })
+  socket.on('error', (err) => {
+    $('#message').text(`ns1收到错误的消息: ${err}`)
   })
 }
 
 function nsSocketInitNs2() {
   const socket = io('/ns2')
   socket.on('online', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns2收到消息: ${event}`)
   })
   socket.on('newMessage', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns2收到消息: ${event}`)
   })
   socket.on('offline', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns2收到消息: ${event}`)
+  })
+  socket.on('error', (err) => {
+    $('#message').text(`ns2收到错误的消息: ${err}`)
   })
 }
 
 function nsSocketInitNs3() {
   const socket = io('/ns3')
   socket.on('online', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns3收到消息: ${event}`)
   })
   socket.on('newMessage', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns3收到消息: ${event}`)
   })
   socket.on('offline', (event) => {
-    $('#message').text(`收到消息: ${event}`)
+    $('#message').text(`ns3收到消息: ${event}`)
+  })
+  socket.on('error', (err) => {
+    $('#message').text(`ns3收到错误的消息: ${err}`)
   })
 }
