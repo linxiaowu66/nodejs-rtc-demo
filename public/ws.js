@@ -1,5 +1,7 @@
 $(document).ready(function(){
-  socketInit();
+  $('.btn').click(() => {
+    socketInit();
+  })
 })
 
 function socketInit(){

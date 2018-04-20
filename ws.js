@@ -54,12 +54,12 @@ setTimeout(() => {
   wss.clients.forEach(client => {
     client.send(`server broadcast to all client => [${client.id}]: ${new Date()}`)
   })
-}, 8 * 1000)
+}, 2 * 60 * 1000)
 
-// 5分钟后给指定的客户端发送消息
+// 3分钟后给指定的客户端发送消息
 setTimeout(() => {
-  targetClient.send(`server send to specific client[${targetClient.id}]: ${new Date()}`)
-}, 10 * 1000)
+  targetClient && targetClient.send(`server send to specific client[${targetClient.id}]: ${new Date()}`)
+}, 3 * 60 * 1000)
 
 server.listen(3000, function listening() {
   console.log('Listening on %d', server.address().port)
