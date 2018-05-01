@@ -152,6 +152,10 @@ io.on('connection', function(socket){
   socket.on('error', function(err){
     console.error('root ns receive error:', err)
   })
+  // 为了测试根ns的客户端个数，超时时间可以自己调整
+  setTimeout(() => {
+    console.log('current clients count: ', io.engine.clientsCount)
+  }, 1000 * 20)
 })
 
 http.listen(3000, function(){

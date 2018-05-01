@@ -1,6 +1,12 @@
 $(document).ready(function(){
   // const socket = socketInit();
   let ns = null
+  $('.ns').click(() => {
+    if (!ns) {
+      nsSocketInitNs()
+      ns = 'ns1'
+    }
+  })
   $('.ns1').click(() => {
     if (!ns) {
       nsSocketInitNs1()
@@ -64,6 +70,13 @@ function socketInit(){
       $('#message').text(`根ns收到流数据: ${buffer}`)
     })
   })
+  socket.on('error', (err) => {
+    $('#message').text(`根ns收到错误的消息: ${err}`)
+  })
+}
+
+function nsSocketInitNs() {
+  const socket = io()
   socket.on('error', (err) => {
     $('#message').text(`根ns收到错误的消息: ${err}`)
   })
